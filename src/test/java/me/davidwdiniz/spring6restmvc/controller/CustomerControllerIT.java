@@ -1,9 +1,7 @@
 package me.davidwdiniz.spring6restmvc.controller;
 
-import me.davidwdiniz.spring6restmvc.entities.Beer;
 import me.davidwdiniz.spring6restmvc.entities.Customer;
 import me.davidwdiniz.spring6restmvc.mappers.CustomerMapper;
-import me.davidwdiniz.spring6restmvc.model.BeerDTO;
 import me.davidwdiniz.spring6restmvc.model.CustomerDTO;
 import me.davidwdiniz.spring6restmvc.repositories.CustomerRepository;
 import org.junit.jupiter.api.Test;
@@ -85,15 +83,13 @@ class CustomerControllerIT {
         ResponseEntity responseEntity = customerController.updateCustomerById(customer.getId(), customerDTO);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
 
-        Customer updatedCustomer = customerRepository.findById(customer.getId()).orElse(null);
+        Customer updatedCustomer = customerRepository.findById(customer.getId()).get();
         assertThat(updatedCustomer.getName()).isEqualTo(customerName);
     }
 
     @Test
     void testUpdateCustomerNotFound() {
-        assertThrows(NotFoundException.class, () -> {
-            customerController.updateCustomerById(UUID.randomUUID(), CustomerDTO.builder().build());
-        });
+        assertThrows(NotFoundException.class, () -> customerController.updateCustomerById(UUID.randomUUID(), CustomerDTO.builder().build()));
     }
 
     @Rollback
@@ -110,15 +106,13 @@ class CustomerControllerIT {
         ResponseEntity responseEntity = customerController.patchCustomerById(customer.getId(), customerDTO);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
 
-        Customer updatedCustomer = customerRepository.findById(customer.getId()).orElse(null);
+        Customer updatedCustomer = customerRepository.findById(customer.getId()).get();
         assertThat(updatedCustomer.getName()).isEqualTo(customerName);
     }
 
     @Test
     void testPatchCustomerNotFound() {
-        assertThrows(NotFoundException.class, () -> {
-            customerController.patchCustomerById(UUID.randomUUID(), CustomerDTO.builder().build());
-        });
+        assertThrows(NotFoundException.class, () -> customerController.patchCustomerById(UUID.randomUUID(), CustomerDTO.builder().build()));
     }
 
     @Rollback
@@ -133,8 +127,6 @@ class CustomerControllerIT {
 
     @Test
     void testDeleteByIdNotFound() {
-        assertThrows(NotFoundException.class, () -> {
-            customerController.deleteCustomerById(UUID.randomUUID());
-        });
+        assertThrows(NotFoundException.class, () -> customerController.deleteCustomerById(UUID.randomUUID()));
     }
 }
