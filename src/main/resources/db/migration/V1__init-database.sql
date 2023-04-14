@@ -4,7 +4,7 @@
     drop table if exists customer cascade;
 
     create table beer (
-       id varchar not null,
+        id varchar not null,
         beer_name varchar(50) not null,
         beer_style smallint not null,
         created_date timestamp(6),
